@@ -50,7 +50,7 @@ def test_bmi_endpoint():
     """
     Test the /bmi endpoint.
 
-    This test sends a POST request to the /bmi endpoint with a JSON payload containing the height and weight.
+    This test sends a POST request to the /bmi endpoint with query parameters containing the height and weight.
     The expected result is compared to the response JSON.
 
     Assertions:
@@ -65,7 +65,7 @@ def test_bmr_endpoint():
     """
     Test the /bmr endpoint.
 
-    This test sends a POST request to the /bmr endpoint with a JSON payload containing the height, weight, age, and
+    This test sends a POST request to the /bmr endpoint with query parameters containing the height, weight, age, and
     gender. The expected result is compared to the response JSON.
 
     Assertions:

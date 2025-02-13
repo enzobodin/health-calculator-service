@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Health Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 1rem;
+        }
+        input, select, button {
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            font-size: 1rem;
+        }
+        button {
+            width: fit-content;
+            margin-top: 1.5rem;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 1rem;
+            font-weight: bold;
+            color: #333;
+        }
+        .error {
+            color: red;
+        }
+        .button-primary {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+        }
+        .button-primary:hover {
+            background-color: #45a049;
+        }
+        .card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Health Calculator</h1>
+        
+        <section id="bmi-section" class="card">
+            <h2>BMI Calculator</h2>
+            <form id="bmi-form">
+                <div class="input-group">
+                    <label for="bmi-height">Height (cm):</label>
+                    <input type="number" step="0.1" id="bmi-height" name="height" required min="1" max="300">
+                </div>
+                
+                <div class="input-group">
+                    <label for="bmi-weight">Weight (kg):</label>
+                    <input type="number" step="0.1" id="bmi-weight" name="weight" required min="1" max="500">
+                </div>
+                
+                <button type="submit" class="button-primary">Calculate BMI</button>
+            </form>
+            <div id="bmi-result" class="result"></div>
+        </section>
+
+        <section id="bmr-section" class="card">
+            <h2>BMR Calculator</h2>
+            <form id="bmr-form">
+                <div class="input-group">
+                    <label for="bmr-height">Height (cm):</label>
+                    <input type="number" step="0.1" id="bmr-height" name="height" required min="1" max="300">
+                </div>
+                
+                <div class="input-group">
+                    <label for="bmr-weight">Weight (kg):</label>
+                    <input type="number" step="0.1" id="bmr-weight" name="weight" required min="1" max="500">
+                </div>
+                
+                <div class="input-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" required min="1" max="150">
+                </div>
+                
+                <div class="input-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender" required>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="button-primary">Calculate BMR</button>
+            </form>
+            <div id="bmr-result" class="result"></div>
+        </section>
+    </div>
+
+    <script>
+        async function handleFormSubmit(event, endpoint) {
+            event.preventDefault();
+            const form = event.target;
+            const resultDiv = form.nextElementSibling;
+            const formData = new FormData(form);
+            
+            const params = new URLSearchParams();
+            for (const [key, value] of formData.entries()) {
+                params.append(key, value);
+            }
+
+            try {
+                const response = await fetch(`/${endpoint}?${params.toString()}`, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.textContent = `Your ${endpoint.toUpperCase()} is: ${data[endpoint]}`;
+                    resultDiv.classList.remove('error');
+                } else {
+                    const error = await response.json();
+                    resultDiv.textContent = `Error: ${error.detail || 'Something went wrong'}`;
+                    resultDiv.classList.add('error');
+                }
+            } catch (error) {
+                resultDiv.textContent = 'Network error occurred';
+                resultDiv.classList.add('error');
+            }
+        }
+
+        document.getElementById('bmi-form').addEventListener('submit', (e) => handleFormSubmit(e, 'bmi'));
+        document.getElementById('bmr-form').addEventListener('submit', (e) => handleFormSubmit(e, 'bmr'));
+    </script>
+</body>
+</html>

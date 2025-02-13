@@ -17,6 +17,7 @@ Usage:
 
 from enum import Enum
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
 import uvicorn
 from health_utils import calculate_bmi, calculate_bmr
 
@@ -33,6 +34,15 @@ class Gender(str, Enum):
     MALE = "male"
     FEMALE = "female"
 
+@app.get("/", include_in_schema=False)
+async def read_root():
+    """
+    Serve the static HTML file.
+
+    Returns:
+        FileResponse: The static HTML file for the root page.
+    """
+    return FileResponse("templates/index.html")
 
 @app.post("/bmi",
           description="Calculate Body Mass Index (BMI)")
@@ -41,7 +51,7 @@ async def get_bmi(height: float, weight: float):
     Asynchronously calculates the Body Mass Index (BMI) based on height and weight.
 
     Args:
-        height (float): The height of the individual in meters.
+        height (float): The height of the individual in centimeters.
         weight (float): The weight of the individual in kilograms.
 
     Returns:
