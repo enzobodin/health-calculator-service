@@ -38,8 +38,29 @@ A FastAPI-based web service that calculates health metrics like BMI (Body Mass I
 ### Setup and Running
 
 1. Clone the repository and navigate into the project directory
-2. Run `make init` to install dependencies
-3. Start the development server with `make run`
+2. Create a virtual environment
+
+   ```bash
+   python -m venv venv
+   ```
+
+3. Activate the virtual environment
+
+   ```bash
+   source venv/bin/activate
+   ```
+
+4. Install dependencies
+
+   ```bash
+   make init
+   ```
+
+5. Start the development server
+
+   ```bash
+   make run
+   ```
 
 The frondend will be available at `http://localhost:5001` and the API at `http://localhost:5001/docs`
 
