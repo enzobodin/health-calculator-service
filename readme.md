@@ -1,3 +1,5 @@
+# /!\ This is a school project
+
 # Health Calculator Service
 
 A FastAPI-based web service that calculates health metrics like BMI (Body Mass Index) and BMR (Basal Metabolic Rate).
